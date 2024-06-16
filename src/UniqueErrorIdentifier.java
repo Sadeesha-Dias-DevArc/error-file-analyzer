@@ -75,6 +75,15 @@ public class UniqueErrorIdentifier {
         for (HashMap.Entry<String, Integer> entry : errorCounts.entrySet()) {
             System.out.println(entry.getKey() + ": " + entry.getValue());
         }
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // Display the toast message
+        ShowToastMessage.toastMessage("Analysis Complete!", 3000);
     }
     
 }
