@@ -7,6 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class UniqueErrorIdentifier {
@@ -24,6 +25,25 @@ public class UniqueErrorIdentifier {
         }
 
         File file = fileChooser.getSelectedFile();
+
+        // Prompt the user to select the length of the regex pattern
+        String[] regexPatternLengthOptions = {"40", "45", "50", "60", "75", "80"};
+        String selectOption = (String) JOptionPane.showInputDialog(
+            null,
+            "Select the length of the pattern:",
+            "Pattern Length",
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            regexPatternLengthOptions,
+            regexPatternLengthOptions[2]
+        );
+
+        if (selectOption == null) {
+            System.out.println("No pattern length selected. Exiting...");
+        }
+
+        int patternLenght = Integer.parseInt(selectOption);
+
         StringBuilder inputStringBuilder = new StringBuilder();
 
         // Read the file content
@@ -39,7 +59,7 @@ public class UniqueErrorIdentifier {
 
         String input = inputStringBuilder.toString();
         HashMap<String, Integer> errorCounts = new HashMap<>();
-        Pattern pattern = Pattern.compile("-1/NO.{0,50}");
+        Pattern pattern = Pattern.compile("-1/NO.{0," + patternLenght + "}");
         Matcher matcher = pattern.matcher(input);
         int totalErrorCount = 0;
 
