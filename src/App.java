@@ -1,7 +1,13 @@
 public class App {
     public static void main(String[] args) throws Exception {
         System.out.println("Running Analyzer!");
-        UniqueErrorIdentifier.errorAnalyzer();
+        ErrorAnalysisResult result = UniqueErrorIdentifier.errorAnalyzer();
+
+        if (result.getFileName() != null) {
+            TextFileGenerator.generateTextFile(result.getAnalysisData(), result.getFileName());
+        } else {
+            System.out.println(result.getAnalysisData());
+        }
 
         try {
             Thread.sleep(3000);
