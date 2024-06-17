@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class UniqueErrorIdentifier {
-    public static void errorAnalyzer() {
+    public static String[] errorAnalyzer() {
         // Open a file chooser dialog
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Select the file to analyze");
@@ -20,8 +20,8 @@ public class UniqueErrorIdentifier {
         int userSelection = fileChooser.showOpenDialog(null);
 
         if (userSelection != JFileChooser.APPROVE_OPTION) {
-            System.out.println("No file selected. Exiting...");
-            return;
+            //System.out.println("No file selected. Exiting...");
+            return new String[] {"No file selected. Exiting...\n", ""};
         }
 
         File file = fileChooser.getSelectedFile();
@@ -39,7 +39,8 @@ public class UniqueErrorIdentifier {
         );
 
         if (selectOption == null) {
-            System.out.println("No pattern length selected. Exiting...");
+            //System.out.println("No pattern length selected. Exiting...");
+            return new String[] {"No pattern length selected. Exiting...\n", ""};
         }
 
         int patternLenght = Integer.parseInt(selectOption);
@@ -53,8 +54,8 @@ public class UniqueErrorIdentifier {
                 inputStringBuilder.append(line).append("\n");
             }
         } catch (IOException e) {
-            System.out.println("Error reading file: " + e.getMessage());
-            return;
+            //System.out.println("Error reading file: " + e.getMessage());
+            return new String[] {"Error reading file: " + e.getMessage() + "\n", ""};
         }
 
         String input = inputStringBuilder.toString();
@@ -69,12 +70,23 @@ public class UniqueErrorIdentifier {
             totalErrorCount++;
         }
 
-        System.err.println("Total error count: " + totalErrorCount);
-        System.out.println("Number of unique errror: " + errorCounts.size());
-        System.out.println("Unique errors and their counts: ");
+        StringBuffer result = new StringBuffer();
+
+        result.append("Total error count: ").append(totalErrorCount).append("\n");
+        //System.err.println("Total error count: " + totalErrorCount);
+
+        result.append("Number of unique errors: ").append(errorCounts.size()).append("\n");
+        //System.out.println("Number of unique errror: " + errorCounts.size());
+
+        result.append("Unique errors and their counts:\n");
+        //System.out.println("Unique errors and their counts: ");
+
         for (HashMap.Entry<String, Integer> entry : errorCounts.entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
+            //System.out.println(entry.getKey() + ": " + entry.getValue());
+            result.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
         }
+
+        result.append("Analyzed file: ").append(file.getName()).append("\n");
 
         try {
             Thread.sleep(2000);
@@ -84,6 +96,8 @@ public class UniqueErrorIdentifier {
 
         // Display the toast message
         ShowToastMessage.toastMessage("Analysis Complete!", 3000);
+
+        return new String[] {result.toString(), file.getName()};
     }
     
 }
